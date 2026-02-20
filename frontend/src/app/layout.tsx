@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import ReduxProvider from "../providers/ReduxProvider";
+import Navbar from "../components/Navbar";
 
 export const metadata: Metadata = {
     title: "Ecommerce",
@@ -14,9 +16,12 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body>
-                <div className="pt-16">
-                    {children}
-                </div>
+                <ReduxProvider>
+                    <Navbar /> 
+                    <div className="pt-16">
+                        {children}
+                    </div>
+                </ReduxProvider>
             </body>
         </html>
     );
