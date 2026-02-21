@@ -11,7 +11,7 @@ function LogIn() {
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
 
-	function handleSubmit(e: React.FormEvent) {
+	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault()
 		console.log('login', { email, password })
 		router.push('/')

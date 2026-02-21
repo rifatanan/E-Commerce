@@ -1,9 +1,9 @@
 import Image from 'next/image'
 import Link from 'next/link'
 
-const image1 = '/images/image.jpg'
-const image2 = '/1.png'
-const ratingImage = '/rating.png'
+const hudiImage = '/images/hudi.png'
+const expandImage = '/images/expand.png'
+const ratingImage = '/images/rating.png'
 
 const rating = [1,2,3,4,5];
 
@@ -14,7 +14,7 @@ const Card = () => {
 
             <Link href={'/product-details?id=123'}>
                 <Image
-                    src={image2}
+                    src={expandImage}
                     alt="image1"
                     className='right-0 rounded-t-sm absolute cursor-pointer'
                     width={30}
@@ -23,7 +23,7 @@ const Card = () => {
             </Link>
             
             <Image 
-                src={image1}
+                src={hudiImage}
                 alt="image1"
                 className='w-full rounded-t-sm '
                 width={400}

@@ -2,10 +2,10 @@
 import React, { useState } from "react";
 
 const images = [
-  "/images/image.jpg",
-  "1.png",
-  "/images/image.jpg",
-  "1.png",
+  "/images/hudi.png",
+  "/images/hudi.png",
+  "/images/hudi.png",
+  "/images/hudi.png"
 ];
 
 const ProductDetails: React.FC = () => {
@@ -66,11 +66,7 @@ const ProductDetails: React.FC = () => {
 
           {/* Price */}
           <div className="flex items-center gap-4 mt-4">
-            <span className="text-gray-400 line-through text-lg">₹1600</span>
-            <span className="text-2xl font-bold text-red-500">₹2200</span>
-            <span className="text-green-600 text-sm font-medium">
-              Available in Stock: 250 Items
-            </span>
+            <span className="text-2xl font-bold text-red-500">2200tk</span>
           </div>
 
           {/* Description */}
