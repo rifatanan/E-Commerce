@@ -30,7 +30,7 @@ const Navbar = () => {
                     <div className="container1 py-2 flex items-center justify-between">
                         {/* Logo */}
                         <Link href="/">
-                            <Image src="/images/logo.jpg" alt="logo" width={100} height={40} className="w-auto h-10" />
+                            <Image src="/images/logo.jpg" alt="logo" width={100} height={40} className="w-50 h-10" />
                         </Link>
 
                         {/* Search Box */}
