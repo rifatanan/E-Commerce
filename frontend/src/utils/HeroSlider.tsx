@@ -1,10 +1,7 @@
 "use client";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
-const image1 = '/images/image.jpg'
-const image2 = '/images/image-copy.png'
-const image3 = '/images/image-copy-2.png'
-const image4 = '/images/image-copy.png'
+const image = '/images/hudi.png'
 
 // Import Swiper styles
 import 'swiper/css';
@@ -18,7 +15,7 @@ const HeroSlider = () => {
       title: "Women Solid Round Green T-Shirt",
       subtitle: "Big Saving Days Sale",
       price: "$59.00",
-      image: image1,
+      image,
       bgColor: "bg-[#F3F4F0]",
     },
 	{
@@ -26,7 +23,7 @@ const HeroSlider = () => {
       title: "Women Solid Round Green T-Shirt",
       subtitle: "Big Saving Days Sale",
       price: "$59.00",
-      image: image2,
+      image,
       bgColor: "bg-[#F3F4F0]",
     },
 	{
@@ -34,7 +31,7 @@ const HeroSlider = () => {
       title: "Women Solid Round Green T-Shirt",
       subtitle: "Big Saving Days Sale",
       price: "$59.00",
-      image: image3,
+      image,
       bgColor: "bg-[#F3F4F0]",
     },
 	{
@@ -42,7 +39,7 @@ const HeroSlider = () => {
       title: "Women Solid Round Green T-Shirt",
       subtitle: "Big Saving Days Sale",
       price: "$59.00",
-      image: image4,
+      image,
       bgColor: "bg-[#F3F4F0]",
     },
   ];
