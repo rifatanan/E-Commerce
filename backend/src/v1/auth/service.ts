@@ -3,7 +3,7 @@ import type { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import authConfigs from "../../configs/auth.config";
 
-export const register = async(request: Request, response:Response) =>{
+export const register = async(request: Request, response: Response ) =>{
     try {
         const { name, email, password } = request.body;
         if(!name || !email || !password){
@@ -38,7 +38,7 @@ export const register = async(request: Request, response:Response) =>{
     }
 }
 
-export const login = async(request: Request, response:Response) =>{
+export const login = async(request: Request, response: Response ) =>{
     try {
         const { email, password } = request.body;
         const user = await User.findOne({email});

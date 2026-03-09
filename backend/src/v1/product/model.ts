@@ -1,6 +1,6 @@
 import { model, Schema } from "mongoose";
 
-const categorySchema = new Schema({
+const ProductSchema = new Schema({
 
     name:{
         type:String,
@@ -19,6 +19,6 @@ const categorySchema = new Schema({
     }
 );
 
-const Category = model('Category', categorySchema);
+const Product = model('Product', ProductSchema);
 
-export default Category;
+export default Product;
