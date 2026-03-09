@@ -80,9 +80,6 @@ export const login = async(request: Request, response: Response ) =>{
     }
 }
 
-const service = {
-    register,
-    login
+export const getUserById = async(id:string) => {
+    return await User.findById(id);
 }
-
-export default service;

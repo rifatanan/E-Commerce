@@ -61,3 +61,7 @@ export const deleteProduct = async(request: Request, response: Response ) => {
         response.status(500).json({message: "Internal server error"});
     }
 }
+
+export const getProductById = async(id:string ) => {
+    return await Product.findById(id);
+}
