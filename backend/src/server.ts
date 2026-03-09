@@ -1,6 +1,7 @@
 import express from 'express';
 import connectMongoDB from './configs/database.config';
 import authRoute from "./v1/auth/route";
+import categroyRoute from "./v1/category/route";
 import dotenv from 'dotenv'
 
 dotenv.config();
@@ -13,6 +14,7 @@ app.use(express.json());
 connectMongoDB();
 
 app.use("/api/auth", authRoute);
+app.use("/api/category", categroyRoute)
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
