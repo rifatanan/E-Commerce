@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
 import Category from "./model";
 
-export const newCategory = async(request: Request, response:Response) => {
+export const createCategory = async(request: Request, response:Response) => {
     try {
         const { name, description } = request.body as { name: string; description: string; };
         if(!name){
@@ -19,12 +19,7 @@ export const newCategory = async(request: Request, response:Response) => {
 
 export const listCategories = async(request: Request, response:Response) => {
     try{
-        const { name } = request.body as { name: string };
-        if(!name){
-            response.status(400).json({message: "Category name is required"});
-            return;
-        }
-        const listCategories = await Category.find({name});
+        const listCategories = await Category.find();
         response.status(200).json(listCategories);
     }catch(error){
         console.error("Error getting List category:", error);
@@ -40,7 +35,11 @@ export const updateCategory = async(request: Request, response:Response) => {
             response.status(400).json({message: "Category name is required"});
             return;
         }
-        const listCategories = await Category.findByIdAndUpdate(id,{name , description}, {new: true});
+        const listCategories = await Category.findByIdAndUpdate( 
+            id,
+            {name , description},
+            { returnDocument: 'after' }
+        );
         response.status(200).json(listCategories);
     }catch(error){
         console.error("Error getting List category:", error);
@@ -52,10 +51,10 @@ export const deleteCategory = async(request: Request, response:Response) => {
     try{
         const { id } = request.params;
         if(!id){
-            response.status(400).json({message: "Category name is required"});
+            response.status(400).json({message: "Category id is required"});
             return;
         }
-        const listCategories = await Category.deleteOne({id});
+        const listCategories = await Category.deleteOne({_id: id });
         response.status(200).json(listCategories);
     }catch(error){
         console.error("Error getting List category:", error);

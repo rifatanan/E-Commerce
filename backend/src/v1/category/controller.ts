@@ -1,8 +1,8 @@
 import type { Request, Response } from "express";
 import * as categoryService from "./service";
 
-export const newCategory = async ( request: Request, response:Response ): Promise<void> => {
-    await categoryService.newCategory(request, response);
+export const createCategory = async ( request: Request, response:Response ): Promise<void> => {
+    await categoryService.createCategory(request, response);
 }
 
 export const listCategories = async ( request: Request, response:Response ): Promise<void> => {
