@@ -6,14 +6,12 @@ import Cart from './model';
 export const createCart = async (request: Request, response: Response ) => {
     const { user, items } = request.body;
     if (!user) {
-        response.status(400).send("User are required");
-        return;
+        return response.status(400).send("User are required");
     }
 
     const userData = getUserById(user);
     if(!userData) {
-        response.status(400).send("User not found");
-        return;
+        return response.status(400).send("User not found");
     }
 
     if(items.length != 0) {
@@ -35,47 +33,49 @@ export const createCart = async (request: Request, response: Response ) => {
 export const listCarts = async (request: Request, response: Response ) => {
     try{
         const listCartsResponse = await Cart.find();
-        response.status(200).json(listCartsResponse);
+        return response.status(200).json(listCartsResponse);
     }catch(error){
         console.error("Error getting carts:", error);
-        response.status(500).json({message: "Internal server error"});
+        return response.status(500).json({message: "Internal server error"});
     }
 }
 
 export const updateCart = async (request: Request, response: Response ) => {
-    const { id } = request.params;
-    const { user, items } = request.body;
-    if (!id) {
-        response.status(400).send("Cart id is required");
-        return;
+    try {
+        const { id } = request.params;
+        const { user, items } = request.body;
+        if (!id) {
+            return response.status(400).send("Cart id is required");
+        }
+        if(!user && !items ) {
+            return response.status(400).send("User or items are required to update");
+        }
+
+        const updatedCart = await Cart.findByIdAndUpdate(
+            id,
+            {
+                ...(user && { user }),
+                ...(items && { items }),
+            },
+            {
+                returnDocument: "after",
+                runValidators: true,
+            }
+        );
+
+        if (!updatedCart) {
+            return response.status(404).json({
+                message: "Cart not found",
+            });
+        }
+
+        return response.status(200).json({
+            message: "Cart updated successfully",
+            data: updatedCart,
+        });
+    } catch (error) {
+        console.error("Error updating cart:", error);
+        return response.status(500).json({ message: "Internal server error",})
     }
-    if(!user && !items ) {
-        response.status(400).send("User or items are required to update");
-    }
-
-    const updatedCart = await Cart.findByIdAndUpdate(
-      id,
-      {
-        ...(user && { user }),
-        ...(items && { items }),
-      },
-      {
-        returnDocument: "after",
-        runValidators: true,
-      }
-    );
-
-    if (!updatedCart) {
-      return response.status(404).json({
-        message: "Cart not found",
-      });
-    }
-
-    return response.status(200).json({
-      message: "Cart updated successfully",
-      data: updatedCart,
-    });
-
-  }
 
 }
