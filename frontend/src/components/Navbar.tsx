@@ -3,7 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import Search from '../utils/Search'
 
-import { BottomSVG, FavouriteSVG, MenuSVG, ShopSVG, StackSVG } from '../../public/svg/svg'
+import { BottomSVG, MenuSVG, ShopSVG } from '../../public/svg/svg'
 import { useState } from 'react'
 import CategoryMenu from './CategoryMenu'
 import CartMenu from './CartMenu'
@@ -77,7 +77,10 @@ const Navbar = () => {
                         {/* Sub Category Bar */}
                         <div className="flex gap-6 py-2 flex-wrap">
                             {subCategory.map((item, i) => (
-                                <Link href={`/${item}`} key={i} className="hover:text-blue-600 capitalize transition-colors">
+                                <Link
+                                    href={`/${item}`}
+                                    key={i}
+                                    className="hover:text-blue-600 capitalize transition-colors">
                                     {item}
                                 </Link>
                             ))}

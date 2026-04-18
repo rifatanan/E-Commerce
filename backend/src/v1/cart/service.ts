@@ -4,39 +4,61 @@ import { getProductById } from '../product/service';
 import Cart from './model';
 
 export const createCart = async (request: Request, response: Response ) => {
-    const { user, items } = request.body;
-    if (!user) {
-        return response.status(400).send("User are required");
+    const { userId, items } = request.body;
+    if (!userId) {
+        return response.status(400).json({
+            success: false,
+            message: "User ID is required"
+        });
     }
 
-    const userData = getUserById(user);
+    const userData = getUserById(userId);
     if(!userData) {
-        return response.status(400).send("User not found");
+        return response.status(400).json({
+            success: false,
+            message: "User not found"
+        });
     }
 
     if(items.length != 0) {
         for(let item of items) {
             if(!item.product || !item.quantity) {
-                return response.status(400).send("Product and quantity are required for each item");
+                return response.status(400).json({
+                    success: false,
+                    message: "Product and quantity are required for each item"
+                });
             }
             const productData = await getProductById(item.product);
             if(!productData) {
-                return response.status(400).send(`Product with id ${item.product} not found`);
+                return response.status(400).json({
+                    success: false,
+                    message: `Product with id ${item.product} not found`
+                });
             }
         }
     }
 
-    const createCartResponse = {user, items };
-    response.status(201).json(createCartResponse);
+    const createCartResponse =await Cart.create( {user:userId, items } )
+    return response.status(201).json({
+        success: true,
+        message: "Cart created successfully.",
+        data: createCartResponse
+    });
 }
 
 export const listCarts = async (request: Request, response: Response ) => {
     try{
         const listCartsResponse = await Cart.find();
-        return response.status(200).json(listCartsResponse);
+        return response.status(200).json({
+            success: true,
+            message: "Carts retrieved successfully.",
+            data: listCartsResponse
+        });
     }catch(error){
-        console.error("Error getting carts:", error);
-        return response.status(500).json({message: "Internal server error"});
+        return response.status(500).json({
+            success: false,
+            message: "Something went wrong in " + error
+        });
     }
 }
 
@@ -45,10 +67,16 @@ export const updateCart = async (request: Request, response: Response ) => {
         const { id } = request.params;
         const { user, items } = request.body;
         if (!id) {
-            return response.status(400).send("Cart id is required");
+            return response.status(400).json({
+                success: false,
+                message: "Cart id is required"
+            });
         }
         if(!user && !items ) {
-            return response.status(400).send("User or items are required to update");
+            return response.status(400).json({
+                success: false,
+                message: "User or items are required to update"
+            });
         }
 
         const updatedCart = await Cart.findByIdAndUpdate(
@@ -65,17 +93,21 @@ export const updateCart = async (request: Request, response: Response ) => {
 
         if (!updatedCart) {
             return response.status(404).json({
-                message: "Cart not found",
+                success: false,
+                message: "Cart not found"
             });
         }
 
         return response.status(200).json({
+            success: true,
             message: "Cart updated successfully",
             data: updatedCart,
         });
     } catch (error) {
-        console.error("Error updating cart:", error);
-        return response.status(500).json({ message: "Internal server error",})
+        return response.status(500).json({
+            success: false,
+            message: "Something went wrong in " + error
+        });
     }
 
 }

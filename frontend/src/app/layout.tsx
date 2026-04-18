@@ -1,27 +1,30 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import ReduxProvider from "../providers/ReduxProvider";
 import Navbar from "../components/Navbar";
+import { ReactNode } from "react";
+import Providers from "../providers/Providers";
+import { Toaster } from 'react-hot-toast';
 
 export const metadata: Metadata = {
-    title: "Ecommerce",
-    description: "Make Online Shopping App",
+  title: "Home Page",
+  description: "Welcome to my Next.js app",
 };
 
 export default function RootLayout({
     children
-    }: Readonly<{
-    children: React.ReactNode;
-}>) {
+    }: {
+    children: ReactNode;
+}) {
     return (
         <html lang="en">
             <body>
-                <ReduxProvider>
+                <Providers>
                     <Navbar /> 
                     <div className="pt-16">
                         {children}
                     </div>
-                </ReduxProvider>
+                    <Toaster />
+                </Providers>
             </body>
         </html>
     );

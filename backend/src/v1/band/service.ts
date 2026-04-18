@@ -5,25 +5,36 @@ export const createBand = async(request: Request, response: Response ) => {
     try {
         const { name, description } = request.body as { name: string; description: string; };
         if(!name){
-            response.status(400).json({message: "Band name is required"});
-            return;
+            return response.status(400).json({message: "Band name is required"});
         }
     
         const createBandResponse = await Band.create({ name, description });
-        response.status(201).json(createBandResponse);
+        return response.status(201).json({
+            success: true,
+            message: "Band created successfully.",
+            data: createBandResponse
+        });
     } catch (error) {
-        console.error("Error creating band: ", error);
-        response.status(500).json({message: "Internal server error"});
+        return response.status(500).json({
+            success:false,
+            message: "Something went wrong in "+error,
+        });
     }
 }
 
 export const listBands = async(request: Request, response: Response ) => {
     try{
         const listBandsResponse = await Band.find();
-        response.status(200).json(listBandsResponse);
+        return response.status(200).json({
+            success: true,
+            message: "Bands retrieved successfully.",
+            data: listBandsResponse
+        });
     }catch(error){
-        console.error("Error getting Band category:", error);
-        response.status(500).json({message: "Internal server error"});
+        return response.status(500).json({
+            success:false,
+            message: "Something went wrong in "+error,
+        });
     }
 }
 
@@ -32,18 +43,26 @@ export const updateBand = async(request: Request, response: Response ) => {
         const { id } = request.params; 
         const { name , description } = request.body as { name: string; description: string; };
         if(!id){
-            response.status(400).json({message: "Band name is required"});
-            return;
+            return response.status(400).json({
+                success:false,
+                message: "Band id is required"
+            });
         }
         const updateBandResponse = await Band.findByIdAndUpdate( 
             id,
             { name , description },
             { returnDocument: 'after' }
         );
-        response.status(200).json(updateBandResponse);
+        return response.status(200).json({
+            success: true,
+            message: "Band updated successfully.",
+            data: updateBandResponse
+        });
     }catch(error){
-        console.error("Error getting List Band:", error);
-        response.status(500).json({message: "Internal server error"});
+        return response.status(500).json({
+            success:false,
+            message: "Something went wrong in "+error,
+        });
     }
 }
 
@@ -51,13 +70,21 @@ export const deleteBand = async(request: Request, response: Response ) => {
     try{
         const { id } = request.params;
         if(!id){
-            response.status(400).json({message: "Band id is required"});
-            return;
+            return response.status(400).json({
+                success:false,
+                message: "Band id is required"
+            });
         }
         const deleteBandResponse = await Band.deleteOne({_id: id });
-        response.status(200).json(deleteBandResponse);
+        return response.status(200).json({
+            success: true,
+            message: "Band deleted successfully.",
+            data: deleteBandResponse
+    });
     }catch(error){
-        console.error("Error getting List Band:", error);
-        response.status(500).json({message: "Internal server error"});
+        return response.status(500).json({
+            success:false,
+            message: "Something went wrong in "+error,
+        });
     }
 }

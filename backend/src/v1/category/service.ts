@@ -5,25 +5,39 @@ export const createCategory = async(request: Request, response: Response ) => {
     try {
         const { name, description } = request.body as { name: string; description: string; };
         if(!name){
-            response.status(400).json({message: "Category name is required"});
-            return;
+            return response.status(400).json({
+                success: false,
+                message: "Category name is required"
+            });
         }
     
         const createCategoryResponse = await Category.create({name, description});
-        response.status(201).json(createCategoryResponse);
+        return response.status(201).json({
+            success: true,
+            message: "Category created successfully.",
+            data: createCategoryResponse
+        });
     } catch (error) {
-        console.error("Error creating category: ", error);
-        response.status(500).json({message: "Internal server error"});
+        return response.status(500).json({
+            success: false,
+            message: "Something went wrong in " + error
+        });
     }
 }
 
 export const listCategories = async(request: Request, response: Response ) => {
     try{
         const listCategoriesResponse = await Category.find();
-        response.status(200).json(listCategoriesResponse);
+        return response.status(200).json({
+            success: true,
+            message: "Categories retrieved successfully.",
+            data: listCategoriesResponse
+        });
     }catch(error){
-        console.error("Error getting List category:", error);
-        response.status(500).json({message: "Internal server error"});
+        return response.status(500).json({
+            success: false,
+            message: "Something went wrong in " + error
+        });
     }
 }
 
@@ -32,18 +46,26 @@ export const updateCategory = async(request: Request, response: Response ) => {
         const { id } = request.params; 
         const { name , description } = request.body as { name: string; description: string; };
         if(!id){
-            response.status(400).json({message: "Category name is required"});
-            return;
+            return response.status(400).json({
+                success: false,
+                message: "Category id is required"
+            });
         }
         const updateCategoryResponse = await Category.findByIdAndUpdate( 
             id,
             { name , description },
             { returnDocument: 'after' }
         );
-        response.status(200).json(updateCategoryResponse);
+        return response.status(200).json({
+            success: true,
+            message: "Category updated successfully.",
+            data: updateCategoryResponse
+        });
     }catch(error){
-        console.error("Error getting List category:", error);
-        response.status(500).json({message: "Internal server error"});
+        return response.status(500).json({
+            success: false,
+            message: "Something went wrong in " + error
+        });
     }
 }
 
@@ -51,13 +73,21 @@ export const deleteCategory = async(request: Request, response: Response ) => {
     try{
         const { id } = request.params;
         if(!id){
-            response.status(400).json({message: "Category id is required"});
-            return;
+            return response.status(400).json({
+                success: false,
+                message: "Category id is required"
+            });
         }
         const deleteCategoryResponse = await Category.deleteOne({_id: id });
-        response.status(200).json(deleteCategoryResponse);
+        return response.status(200).json({
+            success: true,
+            message: "Category deleted successfully.",
+            data: deleteCategoryResponse
+        });
     }catch(error){
-        console.error("Error getting List category:", error);
-        response.status(500).json({message: "Internal server error"});
+        return response.status(500).json({
+            success: false,
+            message: "Something went wrong in " + error
+        });
     }
 }

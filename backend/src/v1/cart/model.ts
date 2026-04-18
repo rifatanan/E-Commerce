@@ -33,6 +33,6 @@ const categorySchema = new Schema({
 );
 
 
-const Category = model('Category', categorySchema);
+const Cart = model('Cart', categorySchema);
 
-export default Category;
+export default Cart;
