@@ -3,13 +3,13 @@ import Band from "./model";
 
 export const createBand = async(request: Request, response: Response ) => {
     try {
-        const { name, description } = request.body as { name: string; description: string; };
+        const { name } = request.body as { name: string;  };
         if(!name){
             response.status(400).json({message: "Band name is required"});
             return;
         }
     
-        const createBandResponse = await Band.create({ name, description });
+        const createBandResponse = await Band.create({ name });
         response.status(201).json(createBandResponse);
     } catch (error) {
         console.error("Error creating band: ", error);
@@ -61,3 +61,13 @@ export const deleteBand = async(request: Request, response: Response ) => {
         response.status(500).json({message: "Internal server error"});
     }
 }
+
+export const findOrCreateBand = async (name: string) => {
+    let band = await Band.findOne({ name });
+
+    if (!band) {
+        band = await Band.create({ name });
+    }
+
+    return band._id;
+};
