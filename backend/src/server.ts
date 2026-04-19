@@ -23,6 +23,8 @@ app.use("/api/category", categroyRoute);
 app.use("/api/band", bandRoute);
 app.use("/api/product", productRoute);
 app.use("/api/cart", cartRoute);
+app.use("/api/category", categroyRoute);
+app.use("/api/product", productRoute);
 
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);

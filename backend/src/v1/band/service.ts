@@ -3,17 +3,13 @@ import Band from "./model";
 
 export const createBand = async(request: Request, response: Response ) => {
     try {
-        const { name, description } = request.body as { name: string; description: string; };
+        const { name } = request.body as { name: string;  };
         if(!name){
             return response.status(400).json({message: "Band name is required"});
         }
     
-        const createBandResponse = await Band.create({ name, description });
-        return response.status(201).json({
-            success: true,
-            message: "Band created successfully.",
-            data: createBandResponse
-        });
+        const createBandResponse = await Band.create({ name });
+        response.status(201).json(createBandResponse);
     } catch (error) {
         return response.status(500).json({
             success:false,
@@ -88,3 +84,13 @@ export const deleteBand = async(request: Request, response: Response ) => {
         });
     }
 }
+
+export const findOrCreateBand = async (name: string) => {
+    let band = await Band.findOne({ name });
+
+    if (!band) {
+        band = await Band.create({ name });
+    }
+
+    return band._id;
+};

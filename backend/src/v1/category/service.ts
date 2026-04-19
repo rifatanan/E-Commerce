@@ -3,7 +3,7 @@ import Category from "./model";
 
 export const createCategory = async(request: Request, response: Response ) => {
     try {
-        const { name, description } = request.body as { name: string; description: string; };
+        const { name } = request.body as { name: string; };
         if(!name){
             return response.status(400).json({
                 success: false,
@@ -11,12 +11,8 @@ export const createCategory = async(request: Request, response: Response ) => {
             });
         }
     
-        const createCategoryResponse = await Category.create({name, description});
-        return response.status(201).json({
-            success: true,
-            message: "Category created successfully.",
-            data: createCategoryResponse
-        });
+        const createCategoryResponse = await Category.create({name});
+        response.status(201).json(createCategoryResponse);
     } catch (error) {
         return response.status(500).json({
             success: false,
@@ -91,3 +87,13 @@ export const deleteCategory = async(request: Request, response: Response ) => {
         });
     }
 }
+
+export const findOrCreateCategory = async (name: string) => {
+  let category = await Category.findOne({ name });
+
+  if (!category) {
+    category = await Category.create({ name });
+  }
+
+  return category._id;
+};
