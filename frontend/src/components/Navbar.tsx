@@ -2,26 +2,26 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import Search from '../utils/Search'
-
 import { BottomSVG, MenuSVG, ShopSVG } from '../../public/svg/svg'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import CategoryMenu from './CategoryMenu'
 import CartMenu from './CartMenu'
+import { useAppSelector } from '../store/store'
 
 const Navbar = () => {
 
     const subCategory = ["home","electronics","fashion","beauty","health","grocery", "bags","footwear", "jewelry","watches","kids","toys","sports","books"];
-    const categoryMenu = ["fashion", "electronics", "bags", "footware", "groceries", "beauty", "fashion", "electronics", "bags", "footware", "groceries", "beauty"];
 
     const [menuStatus, setMenuStatus] = useState(false);
     const [cartStatus, setCartStatus] = useState(false);
-
+    const cartCount = useAppSelector((state) => state.cart.items.reduce((sum, item) => sum + item.quantity, 0));
+    const isLoggedIn = useAppSelector((state) => !!state.login.user);
+    const user = useAppSelector((state)=> state.login.user);
 
     return (
         <div>
-            <CategoryMenu menuStatus={menuStatus} setMenuStatus={setMenuStatus}/>
-
-            <CartMenu cartStatus={cartStatus} setCartStatus = {setCartStatus}/>
+            <CategoryMenu menuStatus = {menuStatus} setMenuStatus = {setMenuStatus}/>
+            <CartMenu cartStatus = {cartStatus} setCartStatus = {setCartStatus}/>
 
             {/* Nav Bar */}
             <nav className="fixed top-0 left-0 w-full z-50 shadow-md bg-white">
@@ -40,21 +40,30 @@ const Navbar = () => {
 
                         {/* Auth + Icons */}
                         <div className="flex gap-6 items-center">
-                            <div className="flex gap-3">
-                                <Link className="hover:underline" href="/login">Login</Link>
-                                <Link className="hover:underline" href="/register">Register</Link>
-                            </div>
+                            { !isLoggedIn ? (
+                                <div className="flex gap-3">
+                                    <Link className="hover:underline" href="/login">Login</Link>
+                                    <Link className="hover:underline" href="/register">Register</Link>
+                                </div>
+                            ) : user ? (
+                                <p>{user?.user?.email}</p>
+                            ) : (
+                                <div className="flex gap-3">
+                                    <Link className="hover:underline" href="/login">Login</Link>
+                                    <Link className="hover:underline" href="/register">Register</Link>
+                                </div>
+                            )}
 
                             <div className="flex gap-4">
-                                    <button 
-                                        className="relative cursor-pointer hover:scale-110 transition-transform"
-                                        onClick= {() => setCartStatus(!cartStatus)}
-                                    >
-                                        <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1.5 rounded-full">
-                                            0
-                                        </span>
-                                        <ShopSVG />
-                                    </button>
+                                <button 
+                                    className="relative cursor-pointer hover:scale-110 transition-transform"
+                                    onClick= {() => setCartStatus(!cartStatus)}
+                                >
+                                    <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1.5 rounded-full">
+                                        {cartCount}
+                                    </span>
+                                    <ShopSVG />
+                                </button>
                             </div>
                         </div>
                     </div>

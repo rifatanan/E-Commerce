@@ -1,5 +1,7 @@
-import React from 'react'
-import { BottomSVG, FavouriteSVG, MenuSVG, ShopSVG, StackSVG } from '../../public/svg/svg'
+import React, { useEffect } from 'react'
+import { ShopSVG } from '../../public/svg/svg'
+import { useAppDispatch, useAppSelector } from '../store/store'
+import { getUserAllAddToCart } from '../store/slices/cartSlice';
 
 interface CartMenuProps {
     cartStatus: boolean;
@@ -7,6 +9,22 @@ interface CartMenuProps {
 }
 
 const CartMenu = ({cartStatus, setCartStatus}: CartMenuProps) => {
+
+    const dispatch = useAppDispatch();
+    const isLogin = useAppSelector((state) => !!state.login.user);
+
+    const cartItems = useAppSelector((state) => state.cart.items);
+    const subtotal = cartItems.reduce((total, item) => total + (item.product.price * item.quantity), 0);
+    const user = useAppSelector((state) => state.login.user);
+
+    console.log('user from cart menu:', user);
+
+    useEffect(() => {
+        if (isLogin) {
+            dispatch(getUserAllAddToCart());
+        }
+    }, [isLogin, dispatch]);
+
   return (
     <div>
       {/*Cart Menu*/}
@@ -39,25 +57,50 @@ const CartMenu = ({cartStatus, setCartStatus}: CartMenuProps) => {
 
                     {/* Cart Content */}
                     <div className='p-4'>
-                        {/* Empty Cart State */}
-                        <div className='flex flex-col items-center justify-center py-10 text-gray-500'>
-                            <ShopSVG />
-                            <p className='mt-4 text-lg'>Your cart is empty</p>
-                            <p className='text-sm'>Add items to get started</p>
-                            <button 
-                                onClick={() => setCartStatus(false)}
-                                className='mt-6 px-6 py-2 bg-red-400 text-white rounded hover:bg-red-500 transition-colors'
-                            >
-                                Continue Shopping
-                            </button>
-                        </div>
+                        {cartItems?.length === 0 ? (
+                            <div className='flex flex-col items-center justify-center py-10 text-gray-500'>
+                                <ShopSVG />
+                                <p className='mt-4 text-lg'>Your cart is empty</p>
+                                <p className='text-sm'>Add items to get started</p>
+                                <button 
+                                    onClick={() => setCartStatus(false)}
+                                    className='mt-6 px-6 py-2 bg-red-400 text-white rounded hover:bg-red-500 transition-colors'
+                                >
+                                    Continue Shopping
+                                </button>
+                            </div>
+                        ) : (
+                            <div className='space-y-4 pb-32'>
+                                {cartItems.map((item, index) => (
+                                    <div key={index} className='flex gap-3 p-3 border rounded-lg'>
+                                        <div className='w-20 h-20 rounded-lg overflow-hidden bg-gray-100'>
+                                            <img
+                                                src={item.product.thumbnail || '/images/hudi.png'}
+                                                alt={item.product.name}
+                                                className='w-full h-full object-cover'
+                                            />
+                                        </div>
+                                        <div className='flex-1'>
+                                            <h3 className='font-semibold text-sm'>{item.product.name || 'Product'}</h3>
+                                            <p className='text-xs text-gray-600'>Price: ${item.product.price?.toFixed(2) || '0.00'}</p>
+                                            <p className='text-xs text-gray-500'>Qty: {item.quantity}</p>
+                                            <p className='text-sm font-semibold text-red-500'>${( item.product.price * item.quantity).toFixed(2)}</p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
 
                     {/* Cart Footer */}
-                    <div className='absolute bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-200'>
-                        <div className='flex justify-between mb-4'>
-                            <span className='font-medium'>Subtotal:</span>
-                            <span className='font-bold'>$0.00</span>
+                    <div className='absolute bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-200 space-y-3'>
+                        <div className='flex justify-between'>
+                            <span className='text-sm font-medium'>Items Total:</span>
+                            <span className='text-sm font-semibold'>${subtotal.toFixed(2)}</span>
+                        </div>
+                        <div className='flex justify-between border-t pt-3'>
+                            <span className='font-medium'>Total:</span>
+                            <span className='font-bold text-red-500'>${subtotal.toFixed(2)}</span>
                         </div>
                         <button className='w-full py-3 bg-red-400 text-white rounded hover:bg-red-500 transition-colors'>
                             Checkout

@@ -9,6 +9,10 @@ export const listProducts = async (request: Request, response: Response ): Promi
     await productService.listProducts(request, response);
 }
 
+export const singleProduct = async (request: Request, response: Response ): Promise<void> => {
+    await productService.singleProduct(request, response);
+}
+
 export const updateProduct = async (request: Request, response: Response ): Promise<void> => {
     await productService.updateProduct(request, response);
 }

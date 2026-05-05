@@ -41,7 +41,6 @@ export const createProduct = async(request: Request, response: Response ) => {
         const findOrCreateBandResponse = await findOrCreateBand(brand);
         const findOrCreateCategoryResponse = await findOrCreateCategory(category);
     
-
         const createProductResponse = await Product.create({
             name,
             description,
@@ -53,7 +52,6 @@ export const createProduct = async(request: Request, response: Response ) => {
             category: findOrCreateCategoryResponse,
             brand: findOrCreateBandResponse
         });
-        response.status(201).json(createProductResponse);
         return response.status(201).json({
             success: true,
             message: "Product created successfully.",
@@ -75,6 +73,29 @@ export const listProducts = async(request: Request, response: Response ) => {
             success: true,
             message: "Products retrieved successfully.",
             data: listProductsResponse
+        });
+    }catch(error){
+        return response.status(500).json({
+            success: false,
+            message: "Something went wrong in " + error
+        });
+    }
+}
+
+export const singleProduct = async(request: Request, response: Response ) => {
+    try{
+        const { id } = request.params;
+        if(!id){
+            return response.status(400).json({
+                success: false,
+                message: "Product id is required"
+            });
+        }
+        const singleProductResponse = await Product.findById(id);
+        return response.status(200).json({
+            success: true,
+            message: "Product retrieved successfully.",
+            data: singleProductResponse
         });
     }catch(error){
         return response.status(500).json({

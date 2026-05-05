@@ -1,4 +1,4 @@
-export default function NotFound() {
+const NotFound = () => {
     return (
         <div className="flex h-screen items-center justify-center">
             <div className="text-center">
@@ -8,3 +8,5 @@ export default function NotFound() {
         </div>
     )
 }
+
+export default NotFound;

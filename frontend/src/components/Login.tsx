@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useAppDispatch, useAppSelector } from '../store/store'
 import { loginUser } from '../store/slices/loginSlice'
+import { addToCart } from '../store/slices/cartSlice'
 import toast from 'react-hot-toast'
 import { loginSchema } from '../utils/validation'
 import type { LoginInput } from '../utils/validation'
@@ -41,10 +42,28 @@ const LogIn = () => {
                 loginUser(validation.data)
             ).unwrap();
         
-            if(result){
-                toast.success("Login successful.")
-                router.push('/');
-            }
+			if(result){
+				toast.success("Login successful.")
+				try {
+					const pending = localStorage.getItem('pendingCartItem');
+					console.log('Pending cart item on login:', pending ? JSON.parse(pending) : null);
+					if (pending) {
+						const parsed = JSON.parse(pending);
+						// add to local state immediately
+						dispatch(addToCart(parsed));
+						// try to sync to backend and wait for result before redirect
+						try {
+                            //await dispatch(getUserAllAddToCart()).unwrap();
+						} catch (syncErr) {
+							console.error('Failed to sync pending cart item to server:', syncErr);
+						}
+						localStorage.removeItem('pendingCartItem');
+					}
+				} catch (e) {
+					// ignore JSON errors
+				}
+				router.push('/');
+			}
           } catch (error) {
             toast.error(error instanceof Error ? error.message : "Login failed");
           }
