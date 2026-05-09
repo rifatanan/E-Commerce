@@ -17,7 +17,7 @@ const CartMenu = ({cartStatus, setCartStatus}: CartMenuProps) => {
     const subtotal = cartItems.reduce((total, item) => total + (item.product.price * item.quantity), 0);
     const user = useAppSelector((state) => state.login.user);
 
-    console.log('user from cart menu:', user);
+    //console.log('user from cart menu:', user);
 
     useEffect(() => {
         if (isLogin) {

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useSearchParams } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import { fetchProductById } from '../store/slices/productsSlice';
-import { addToCart, addPendingItemToCart, addItemToUserCart } from '../store/slices/cartSlice';
+import { addToCart } from '../store/slices/cartSlice';
 import { useRouter } from 'next/navigation';
 
 interface Product {

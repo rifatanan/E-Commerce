@@ -38,7 +38,7 @@ export const getUserAllAddToCart = createAsyncThunk(
     const state: any = getState();
     const user = state.login.user;
     const userId = user?.user?.id || user?.id || user?._id || user?.userId;
-    console.log('Fetching cart for user:', userId);
+    //console.log('Fetching cart for user:', userId);
     try {
       const res = await fetch(`http://localhost:8000/api/cart/user/${userId}`, {
         method: 'GET',
@@ -47,7 +47,7 @@ export const getUserAllAddToCart = createAsyncThunk(
         },
       });
       const resultJson = await res.json();
-      console.log('get user all cart api response status:', resultJson);
+      //console.log('get user all cart api response status:', resultJson);
       if (!res.ok) return rejectWithValue(resultJson?.message || 'API error');
       return resultJson.data.items || [];
     } catch (err: any) {
@@ -75,6 +75,9 @@ const cartSlice = createSlice({
         });
       }
     },
+    clearCart: (state) => {
+    state.items = [];
+    }
 
   },
   extraReducers: (builder) => {
@@ -98,6 +101,6 @@ const cartSlice = createSlice({
 
 export const { 
     addToCart,
-    
+    clearCart
 } = cartSlice.actions;
 export default cartSlice.reducer;
